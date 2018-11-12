@@ -1,12 +1,14 @@
 package example.springjwtexample.User;
 
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/users/")
+@RequestMapping("/")
 public class UserController {
 
     private UserRepository userRepository;
@@ -22,4 +24,8 @@ public class UserController {
         userApp.setPassword(bCryptPasswordEncoder.encode(userApp.getPassword()));
         userRepository.save(userApp);
     }
+
+    @PostMapping("login")
+    public void echo (@AuthenticationPrincipal final UserDetails user) { }
+
 }
