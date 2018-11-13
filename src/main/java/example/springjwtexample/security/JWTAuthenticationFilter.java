@@ -51,24 +51,21 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     @Override
     protected void successfulAuthentication(
+
             HttpServletRequest request,
             HttpServletResponse response,
             FilterChain chain,
-            Authentication auth) throws IOException, ServletException {
+            Authentication auth) {
 
         String token = JWT.create().withSubject(
                 ((User) auth.getPrincipal()).getUsername())
                 .withExpiresAt(new Date(System.currentTimeMillis() + Constans.EXPIRATION_TIME))
                 .sign(Algorithm.HMAC512(Constans.SECRET.getBytes()));
 
-        //    response.addHeader("access-control-expose-headers", "Authorization");
-
+        response.addHeader("access-control-expose-headers", "Authorization");
         response.addHeader(Constans.AUTH_HEADER, Constans.TOKEN_PREFIX + token);
-        response.addHeader("UserApp", ((User) auth.getPrincipal()).getUsername());
-
-        response.addCookie(new Cookie("Ciasteczko", "Moje_pyszne_ciasteczko"));
-      //  response.sendRedirect("http://www.wp.pl");
+        response.addHeader("username", ((User) auth.getPrincipal()).getUsername());
+     //   response.addCookie(new Cookie("Ciasteczko", "Moje_pyszne_ciasteczko"));
 
     }
-
 }
